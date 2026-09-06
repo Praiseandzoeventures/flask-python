@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Login</title>
+</head>
+<body>
+     <div align="center">
+     <div align="center" class="border">
+      <div align="center" class="header">
+        <h1 class="word">Login</h1>
+        </div>
+    <h2 class="word">
+    <form action="/login" method="post">
+    <div class="msg">{{msg}}</div>
+    <input id="username" name="username" type="text" placeholder="Username" required>
+    <input id="password" name="password" type="password" placeholder="Password" required>
+</br>
+     
+    <input type="submit" value="sign in"class="btn"></br></br>
+    </form>
+    </h2>
+    <p class="word">Don't have an account? <a href="/register">Register</a></p>
+    </div>
+    </div>
+</body>
+</html>
