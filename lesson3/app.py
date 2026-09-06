@@ -27,4 +27,4 @@ def details():
         if not features:
             return render_template('index.html', error='No results found for the given location')
         
-        except Exception :
+    except Exception : 
