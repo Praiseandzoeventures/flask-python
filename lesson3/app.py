@@ -5,26 +5,42 @@ import urllib.request
 
 app = Flask(__name__)
 
-@app.route('/', methods=['GET', 'POST'])
+@app.route("/", methods=["GET", "POST"])
 def details():
-    if request.method == 'GET':
-        return render_template('index.html')
-    
-    location = request.form.get('location')
+    if request.method == "GET":
+        return render_template("index.html")
+
+    location = request.form.get("location", "").strip()
     if not location:
-        return render_template('index.html', error='Give the correct location') 
-    
+        return render_template("index.html", error="Give the correct location")
+
     try:
         q = urllib.parse.quote(location)
-        url = f"https://photon.komoot.io/api/?q={q}&limit=1"
 
+        # ✅ Free working endpoint (no key): Photon (Komoot)
+        url = f"https://photon.komoot.io/api/?q={q}&limit=1"
         req = urllib.request.Request(url, headers={"User-Agent": "FlaskGeocoder/1.0"})
-        
-        source = urllib.request.urlopen(req)
-        data = json.loads(source.read())
-        
-        features = responseData.get('features')
+
+        source = urllib.request.urlopen(req).read()
+        responseData = json.loads(source)
+
+        features = responseData.get("features", [])
         if not features:
-            return render_template('index.html', error='No results found for the given location')
-        
-    except Exception : 
+            return render_template("index.html", error="Give the correct location")
+
+        # Photon returns [longitude, latitude]
+        lon, lat = features[0]["geometry"]["coordinates"]
+
+        data = {
+            "latitude": str(lat),
+            "longitude": str(lon),
+        }
+
+        return render_template("index.html", data=data)
+
+    except Exception:
+        return render_template("index.html", error="Give the correct location")
+
+
+if __name__ == "__main__":
+    app.run(host="0.0.0.0", port=8080, debug=True)
